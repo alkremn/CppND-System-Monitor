@@ -376,7 +376,8 @@ std::string ProcessParser::getOSName()
             std::size_t found = line.find("=");
             found++;
             std::string result = line.substr(found);
-            return result.erase(std::remove(result.begin(), result.end(), '"'), result.end());
+            result.erase(std::remove(result.begin(), result.end(), '"'), result.end());
+            return result;
         }
     }
     return "";
@@ -384,20 +385,68 @@ std::string ProcessParser::getOSName()
 
 int ProcessParser::getTotalThreads()
 {
+    std::string name = "Threads:";
+    std::vector<std::string> list = ProcessParser::getPidList();
     std::string line;
     int result = 0;
-    std::string name = "Threads:";
-    std::path = Path::basePath() + pid + Path::statusPath();
-    std::vector<std::string> list = ProcessParser::getPidList();
-    for (int i=0 ; i<list.size();i++) {
-    std::string pid = list[i];
+    
+    for (int i=0 ; i<list.size();i++) 
+    {
+        std::string pid = list[i];
+
+        std::path = Path::basePath() + pid + Path::statusPath();
+        Util::getStream(path, stream);
+        while (std::getline(stream, line)) 
+        {
+            if (line.compare(0, name.size(), name) == 0) {
+                std::istringstream buf(line);
+                std::istream_iterator<std::string> beg(buf), end;
+                std::vector<std::string> values(beg, end);
+                result += std::stoi(values[1]);
+                break;
+            }
+        }
+    }
+    return result;
+}
+
+int ProcessParser::getTotalNumberOfProcesses()
+{
+    std::string path = Path::basePath() + Path::statPath();
+    std::string name = "processes";
+    std:string line;
+    int result = 0;
 
     Util::getStream(path, stream);
-    while (std::getline(stream, line)) {
-        if (line.compare(0, name.size(), name) == 0) {
+    while(std::getline(stream, line))
+    {
+        if(line.compare(0, name.size(), name) == 0) 
+        {
             std::istringstream buf(line);
             std::istream_iterator<std::string> beg(buf), end;
-            std::vector<std::string> values(beg, end);
+            std::vector<std::string> values (beg, end);
+            result += std::stoi(values[1]);
+            break;
+        }
+    }
+    return result;
+}
+
+int ProcessParser::getNumberOfRunningProcesses() 
+{
+    std::string path = Path::basePath() + Path::statPath();
+    std::string name = "procs_running";
+    std:string line;
+    int result = 0;
+
+    Util::getStream(path, stream);
+    while(std::getline(stream, line))
+    {
+        if(line.compare(0, name.size(), name) == 0) 
+        {
+            std::istringstream buf(line);
+            std::istream_iterator<std::string> beg(buf), end;
+            std::vector<std::string> values (beg, end);
             result += std::stoi(values[1]);
             break;
         }
