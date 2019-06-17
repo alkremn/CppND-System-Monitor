@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include "ProcessParser.h"
+
 class SysInfo {
 private:
     std::vector<std::string> lastCpuStats;
