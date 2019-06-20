@@ -43,7 +43,7 @@ std::string Process::getPid() const
 }
 std::string Process::getProcess()
 {
-    if(!ProcessParser::isPidExisting(this-pid)) 
+    if(!ProcessParser::isPidExisting(this->pid)) 
         return "";
 
     this->mem = ProcessParser::getVmSize(this->pid);
