@@ -21,7 +21,7 @@
 
 class ProcessParser{
 private:
-    static std::ifstream stream;
+    std::ifstream stream;
     public:
     static std::string getCmd(std::string pid);
     static std::vector<std::string> getPidList();
@@ -43,13 +43,12 @@ private:
 };
 
 // TODO: Define all of the above functions below:
-std::ifstream ProcessParser::stream;
-
 std::string ProcessParser::getCmd(std::string pid)
 {
     std::string path = Path::basePath() + pid + Path::cmdPath();
     std::string line;
     
+    std::ifstream stream;
     Util::getStream(path, stream);
     if(stream.is_open()){
         std::getline(stream, line);
@@ -94,6 +93,7 @@ std::string ProcessParser::getVmSize(std::string pid)
     std::string status_path = Path::basePath() + pid + Path::statusPath();
     std::string vm_data = "VmData";
 
+    std::ifstream stream;
     Util::getStream(status_path, stream);
     if(stream.is_open())
     {
@@ -115,6 +115,7 @@ std::string ProcessParser::getVmSize(std::string pid)
 std::string ProcessParser::getCpuPercent(std::string pid)
 {
     std::string path = Path::basePath() + pid +"/"+ Path::statPath();
+    std::ifstream stream;
     Util::getStream(path, stream);
     
     if(stream.is_open()){
@@ -147,6 +148,7 @@ std::string ProcessParser::getCpuPercent(std::string pid)
 std::string ProcessParser::getProcUpTime(std::string pid)
 {
     std::string path = Path::basePath() + pid + "/" + Path::statPath();
+    std::ifstream stream;
     Util::getStream(path, stream);
     if(stream.is_open()){
         std::string line;
@@ -167,6 +169,7 @@ long int ProcessParser::getSysUpTime()
     std::string path = Path::basePath() + Path::upTimePath();
     std::string line;
 
+    std::ifstream stream;
     Util::getStream(path, stream);
     std::getline(stream, line);
 
@@ -181,6 +184,7 @@ std::string ProcessParser::getProcUser(std::string pid)
 {
     std::string name = "Uid:";
     std::string path = Path::basePath() + pid + Path::statusPath();
+    std::ifstream stream;
     Util::getStream(path, stream);
     std::string line;
     std::string user_id;
@@ -214,6 +218,7 @@ int ProcessParser::getNumberOfCores()
     std::string line;
     std::string name = "cpu cores";
     std::string path = Path::basePath() + "cpuinfo";
+    std::ifstream stream;
     Util::getStream(path, stream);
     
     if(stream.is_open())
@@ -236,6 +241,7 @@ std::vector<std::string> ProcessParser::getSysCpuPercent(std::string coreNumber)
     std::string line;
     std::string name = "cpu" + coreNumber;
     std::string path = Path::basePath() + Path::statPath();
+    std::ifstream stream;
     Util::getStream(path, stream);
     if(stream.is_open())
     {
@@ -290,6 +296,7 @@ float ProcessParser::getSysRamPercent()
     float freeMem = 0;
     float buffers = 0;
 
+    std::ifstream stream;
     Util::getStream(path, stream);
 
     std::string line;
@@ -331,6 +338,7 @@ std::string ProcessParser::getSysKernelVersion()
     std::string name = "Linux version ";
     std::string line;
     
+    std::ifstream stream;
     Util::getStream(path, stream);
     while(std::getline(stream, line))
     {
@@ -351,6 +359,7 @@ std::string ProcessParser::getOSName()
     std::string path = "/etc/os-release";
     std::string line;
     
+    std::ifstream stream;
     Util::getStream(path, stream);
 
     while(std::getline(stream, line))
@@ -378,6 +387,7 @@ int ProcessParser::getTotalThreads()
     {
         std::string pid = list[i];
 
+        std::ifstream stream;
         std::string path = Path::basePath() + pid + Path::statusPath();
         Util::getStream(path, stream);
         while (std::getline(stream, line)) 
@@ -401,6 +411,7 @@ int ProcessParser::getTotalNumberOfProcesses()
     std:string line;
     int result = 0;
 
+    std::ifstream stream;
     Util::getStream(path, stream);
     while(std::getline(stream, line))
     {
@@ -423,6 +434,7 @@ int ProcessParser::getNumberOfRunningProcesses()
     std::string line;
     int result = 0;
 
+    std::ifstream stream;
     Util::getStream(path, stream);
     while(std::getline(stream, line))
     {
