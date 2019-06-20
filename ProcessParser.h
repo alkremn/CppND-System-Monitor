@@ -63,7 +63,7 @@ std::vector<std::string> ProcessParser::getPidList()
     std::vector<std::string> pid_list;
     DIR* dr;
     struct dirent* drnt;
-    if((dr = opendir(base_path.c_str())) != NULL)
+    if((dr = opendir("/proc")) != NULL)
     {
         while((drnt = readdir(dr)) != NULL)
         {
@@ -82,10 +82,8 @@ std::vector<std::string> ProcessParser::getPidList()
         }
         if(closedir(dr))
             throw std::runtime_error(std::strerror(errno));
-        
-        return pid_list;
     }
-    return std::vector<std::string>();
+    return pid_list;
 }
 
 std::string ProcessParser::getVmSize(std::string pid)
@@ -452,5 +450,5 @@ int ProcessParser::getNumberOfRunningProcesses()
 
 bool ProcessParser::isPidExisting(std::string pid)
 {
-    return pid.empty();
+    return !pid.empty();
 }
