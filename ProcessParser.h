@@ -198,8 +198,9 @@ std::string ProcessParser::getProcUser(std::string pid)
             break;
         }
     }
-    Util::getStream("/etc/passwd", stream);
+    stream.close();
 
+    Util::getStream("/etc/passwd", stream);
     name = "x:" + user_id;
     while(std::getline(stream, line))
     {
